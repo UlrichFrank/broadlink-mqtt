@@ -17,11 +17,13 @@ ENV DEVICE_HOST=192.168.1.50
 ENV DEVICE_MAC=01:23:45:67:ab:00
 
 COPY mqtt.conf.template /app
-COPY commands/ /app/commands/
-COPY start.sh /app
 
-VOLUME [ "/broadlink-mqtt-bridge/config", "/broadlink-mqtt-bridge/commands" ]
+RUN mkdir /app/config
+RUN mkdir /app/data
+RUN mkdir /app/data/commands
+RUN mkdir /app/data/log
 
-RUN chmod +x start.sh
+VOLUME [ "./config/broadlink-mqtt-bridge", "/app/config" ]
+VOLUME [ "./data/broadlink-mqtt-bridge", "/app/data" ]
 
-ENTRYPOINT ["./start.sh"]
+ENTRYPOINT ["python", "./mqtt.py"]

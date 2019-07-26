@@ -21,9 +21,9 @@ except ImportError:
 
 # read initial config files
 dirname = os.path.dirname(os.path.abspath(__file__)) + '/'
-logging.config.fileConfig(dirname + 'logging.conf')
-CONFIG = os.getenv('BROADLINKMQTTCONFIG', dirname + 'mqtt.conf')
-CONFIG_CUSTOM = os.getenv('BROADLINKMQTTCONFIGCUSTOM', dirname + 'custom.conf')
+logging.config.fileConfig(dirname + 'conf/logging.conf')
+CONFIG = os.getenv('BROADLINKMQTTCONFIG', dirname + 'conf/mqtt.conf')
+CONFIG_CUSTOM = os.getenv('BROADLINKMQTTCONFIGCUSTOM', dirname + 'conf/custom.conf')
 
 
 class Config(object):
@@ -120,7 +120,7 @@ def on_message(client, device, msg):
             return
 
         if device.type == 'RM2':
-            file = dirname + "commands/" + command
+            file = dirname + "data/commands/" + command
             handy_file = file + '/' + action
 
             if action == '' or action == 'auto':
@@ -142,7 +142,7 @@ def on_message(client, device, msg):
                 replay(device, file)
                 return
             elif action == 'macro':
-                file = dirname + "macros/" + command
+                file = dirname + "conf/macros/" + command
                 macro(device, file)
                 return
 
@@ -259,7 +259,7 @@ def macro(device, file):
                 logging.debug("Pause for " + str(pause) + " milliseconds")
                 time.sleep(pause / 1000.0)
             else:
-                command_file = dirname + "commands/" + line
+                command_file = dirname + "data/commands/" + line
                 replay(device, command_file)
 
 
